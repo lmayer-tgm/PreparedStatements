@@ -1,7 +1,10 @@
 package jdbc.prep_statements;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -16,23 +19,33 @@ import joptsimple.OptionSet;
  * @version 20160221.2
  */
 public class CommandLineParser {
-											 /*option name		option description					argument description*/
-	public static String[] HOSTNAME_OPTION = {	"host", 	"server to connect to", 				"ip_or_hostname"};
-	public static String[] DBNAME_OPTION = {	"dbname", 	"name of db to connect to", 			"database_name"};
-	public static String[] USERNAME_OPTION = {	"username", "username of user used for connection", "username"};
-	public static String[] PASSWORD_OPTION = {	"password", "password of user used for connection", "password"};
-	public static String HELP = "help";
+	
+	public static List<String> HOSTNAME = Arrays.asList("hostname","host","h");
+	public static List<String> DBNAME = Arrays.asList("databasename","dbname","db");
+	public static List<String> USERNAME = Arrays.asList("username","user","u");
+	public static List<String> PASSWORD = Arrays.asList("password","pw");
+	public static List<String> PORT = Arrays.asList("port","p");
+	public static List<String> HELP = Arrays.asList("help","?");
+											 /*option description					argument description*/
+	public static String[] HOSTNAME_DESC = {"server to connect to", 					"ip_or_hostname"};
+	public static String[] DBNAME_DESC = {	"name of db to connect to", 				"database_name"};
+	public static String[] USERNAME_DESC = {"username of user used for connection", 	"username"};
+	public static String[] PASSWORD_DESC = {"password of user used for connection", 	"password"};
+	public static String[] PORT_DESC = {	"port, used for connection to db server", 	"port"};
+	private static int DEFAULT_PORT = 5432;
 
 	private OptionParser parser;
 	private OptionSet set;
 
 	public CommandLineParser() {
 		parser = new OptionParser();
-		parser.accepts(HELP, "prints this help message").forHelp();
-		parser.accepts(HOSTNAME_OPTION[0], HOSTNAME_OPTION[1]).withRequiredArg().describedAs(HOSTNAME_OPTION[2]).ofType(String.class).required();
-		parser.accepts(DBNAME_OPTION[0], DBNAME_OPTION[1]).withRequiredArg().describedAs(DBNAME_OPTION[2]).ofType(String.class).required();
-		parser.accepts(USERNAME_OPTION[0], USERNAME_OPTION[1]).withRequiredArg().describedAs(USERNAME_OPTION[2]).ofType(String.class).required();
-		parser.accepts(PASSWORD_OPTION[0], PASSWORD_OPTION[1]).withRequiredArg().describedAs(PASSWORD_OPTION[2]).ofType(String.class).required();
+		parser.acceptsAll(HELP, "prints this help message").forHelp();
+		parser.acceptsAll(HOSTNAME, HOSTNAME_DESC[0]).withRequiredArg().describedAs(HOSTNAME_DESC[1]).ofType(String.class).required();
+		parser.acceptsAll(DBNAME, DBNAME_DESC[0]).withRequiredArg().describedAs(DBNAME_DESC[1]).ofType(String.class).required();
+		parser.acceptsAll(USERNAME, USERNAME_DESC[0]).withRequiredArg().describedAs(USERNAME_DESC[1]).ofType(String.class).required();
+		parser.acceptsAll(PASSWORD, PASSWORD_DESC[0]).withRequiredArg().describedAs(PASSWORD_DESC[1]).ofType(String.class).required();
+		parser.acceptsAll(PORT, PORT_DESC[0]).withOptionalArg().describedAs(PORT_DESC[1]).ofType(Integer.class).defaultsTo(DEFAULT_PORT);
+
 	}
 
 	/**
@@ -44,7 +57,7 @@ public class CommandLineParser {
 	 */
 	public void parse(String[] toParse) {
 		set = parser.parse(toParse);
-		if(set.has(HELP))
+		if(set.has(HELP.get(0)))
 			printHelp();
 	}
 	
@@ -67,7 +80,7 @@ public class CommandLineParser {
 	 * @param option the option, which's argument is requested
 	 * @return argument supplied to a specific option
 	 */
-	public String getArgumentOf(String option){
-		return (String) set.valueOf(option);
+	public String getArgumentOf (String option){
+		return ""+set.valueOf(option);
 	}
 }

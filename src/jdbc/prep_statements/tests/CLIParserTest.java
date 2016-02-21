@@ -61,8 +61,11 @@ public class CLIParserTest {
 	@Test
 	public void testParseArgsSupplied() {
 		CommandLineParser parser = new CommandLineParser();
-		String[] args = {"--host", "host_name", "--dbname", "name", "--username", "user", "--password", "pw"}; // arguments here ->  no error
-		parser.parse(args);
+		String[] args1 = {"--host", "host_name", "--dbname", "name", "--username", "user", "--password", "pw"}; // arguments here ->  no error
+		parser.parse(args1);
+		String[] args2 = {"-h", "host_name", "-db", "name", "-u", "user", "-pw", "pw"}; // synonym forms
+		parser.parse(args2);
+
 	}
 	
 	/**
@@ -86,29 +89,36 @@ public class CLIParserTest {
 		String[] args = {"--help"}; // arguments missing -> should lead to error
 		parser.parse(args);
 		String output = outContent.toString();
-		Assert.assertTrue(output.contains("--host")); //didnt test ALL of the content, that should be printed out...
+		Assert.assertTrue(output.contains("--host")); //didn't test ALL of the content, that will be printed out...
 		Assert.assertTrue(output.contains("server to connect to"));
 		Assert.assertTrue(output.contains("<database_name>"));
 		Assert.assertTrue(output.contains("Description"));
 		Assert.assertTrue(output.contains("--username <username>"));
-		Assert.assertTrue(output.contains("prints this")); //...but that should be enough
-
+		Assert.assertTrue(output.contains("prints this"));
+		Assert.assertTrue(output.contains("-p"));
+		Assert.assertTrue(output.contains("--port"));
+		Assert.assertTrue(output.contains("default: 5432")); //...but that should be enough
 	}
 
 	/**
 	 * Test method for {@link jdbc.prep_statements.CommandLineParser#getArgumentOf(java.lang.String)}.
-	 * Gets the values of the required arguments
+	 * Gets the values of the required arguments, tests if optional arguments defaults to certain value
 	 */
 	@Test
 	public void testGetArgumentOf() {
-		String hostname = "some_host", dbname = "some_db", username = "some_user", password = "super_secret";
+		String hostname = "some_host", dbname = "some_db", username = "some_user", password = "super_secret", port = "5432";
 		CommandLineParser parser = new CommandLineParser();
-		String[] args = {"--host", hostname, "--dbname", dbname, "--username", username, "--password", password};
-		parser.parse(args);
-		Assert.assertEquals(parser.getArgumentOf("host"), hostname);
-		Assert.assertEquals(parser.getArgumentOf("dbname"), dbname);
-		Assert.assertEquals(parser.getArgumentOf("username"), username);
-		Assert.assertEquals(parser.getArgumentOf("password"), password);				
+		String[] args1 = {"--host", hostname, "--dbname", dbname, "--username", username, "--password", password};
+		parser.parse(args1);
+		Assert.assertEquals(hostname, parser.getArgumentOf("host"));
+		Assert.assertEquals(dbname, parser.getArgumentOf("dbname"));
+		Assert.assertEquals(username, parser.getArgumentOf("username"));
+		Assert.assertEquals(password, parser.getArgumentOf("password"));
+		Assert.assertEquals(port, parser.getArgumentOf("port"));
+		String[] args2 = {"--host", hostname, "--dbname", dbname, "--username", username, "--password", password, "--port", "1111"};
+		parser.parse(args2);
+		Assert.assertEquals("1111", parser.getArgumentOf("port"));
+
 	}
 
 }
