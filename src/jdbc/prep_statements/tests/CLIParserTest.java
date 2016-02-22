@@ -115,9 +115,11 @@ public class CLIParserTest {
 		Assert.assertEquals(username, parser.getArgumentOf("username"));
 		Assert.assertEquals(password, parser.getArgumentOf("password"));
 		Assert.assertEquals(port, parser.getArgumentOf("port"));
-		String[] args2 = {"--host", hostname, "--dbname", dbname, "--username", username, "--password", password, "--port", "1111"};
+		String[] args2 = {"--host", hostname, "--db", dbname, "--username", username, "--password", password, "--port", "1111"};
 		parser.parse(args2);
 		Assert.assertEquals("1111", parser.getArgumentOf("port"));
+		Assert.assertEquals("some_db", parser.getArgumentOf("databasename"));
+
 
 	}
 
