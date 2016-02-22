@@ -1,5 +1,9 @@
 package jdbc.prep_statements;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.postgresql.ds.PGSimpleDataSource;
 
 /**
@@ -11,6 +15,15 @@ import org.postgresql.ds.PGSimpleDataSource;
  */
 public class DBConnection {
 	private PGSimpleDataSource ds;
+	private Connection con;
+	
+	/**
+	 * establishes a new connection
+	 * @param host hostname or ip of the host
+	 * @param databasename name of the database
+	 * @param username username
+	 * @param password password
+	 */
 	public DBConnection(String host, String databasename, String username, String password) {
 		ds = new PGSimpleDataSource(); // Neue PostgreSQL
 										// Datenquelle
@@ -19,8 +32,25 @@ public class DBConnection {
 		ds.setUser(username); // Datenbankuser
 		ds.setPassword(password); // Datenbankpasswort
 		// Verbindung herstellen
+		try {
+			con = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	public void executeQuery(){
-		
+	
+	/**
+	 * wrapper for prepareStatement method of JDBC's connection class
+	 * @param statement
+	 * @return
+	 */
+	public PreparedStatement prepareStatement(String statement){
+		try {
+			return con.prepareStatement(statement);
+		} catch (SQLException e) {
+			e.printStackTrace(); //TODO improve error handling...
+		}
+		return null;
 	}
+	
 }
