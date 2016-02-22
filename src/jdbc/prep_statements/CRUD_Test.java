@@ -14,6 +14,7 @@ public class CRUD_Test {
 
 	private PreparedStatement insert, select, update, delete;
 	private String table = "person";
+	private DBConnection con;
 	
 	/**
 	 * creates an crud test object
@@ -21,6 +22,7 @@ public class CRUD_Test {
 	 * @param con established connection
 	 */
 	public CRUD_Test(DBConnection con) {
+		this.con = con;
 		insert = con.prepareStatement("INSERT INTO " + table + " VALUES(?, ?, ?)");
 		select = con.prepareStatement("SELECT * FROM " + table + " WHERE nummer = ?");
 		update = con.prepareStatement("UPDATE " + table + " SET vorname = ? WHERE nummer = ?");
@@ -39,7 +41,9 @@ public class CRUD_Test {
 			System.out.println(select.toString());
 			return select.executeQuery();
 		} catch(SQLException e){
+			System.err.println("Error while executing query:");
 			e.printStackTrace();
+			con.cleanup();
 		}
 		return null;
 	}
@@ -57,7 +61,7 @@ public class CRUD_Test {
 		System.out.println(insert.toString());
 			insert.execute();
 		}catch(SQLException e){
-			e.printStackTrace();
+			handleException(e);
 		}
 	}
 	/**
@@ -72,7 +76,7 @@ public class CRUD_Test {
 			System.out.println(update.toString());
 			update.executeUpdate();
 		}catch(SQLException e){
-			e.printStackTrace();
+			handleException(e);
 		}
 	}
 	/**
@@ -85,7 +89,18 @@ public class CRUD_Test {
 			System.out.println(delete.toString());
 			delete.executeUpdate();
 		}catch(SQLException e){
-			e.printStackTrace();
+			handleException(e);
 		}
+	}
+	
+	/**
+	 * Prints error message and quits application with error code -1
+	 * @param e the exception to print stack trace from
+	 */
+	private void handleException(Exception e){
+		System.err.println("Error while executing prepared statement");
+		e.printStackTrace();
+		con.cleanup();
+		System.exit(-1);
 	}
 }

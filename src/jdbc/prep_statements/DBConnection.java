@@ -25,32 +25,48 @@ public class DBConnection {
 	 * @param password password
 	 */
 	public DBConnection(String host, String databasename, String username, String password) {
-		ds = new PGSimpleDataSource(); // Neue PostgreSQL
-										// Datenquelle
-		ds.setServerName(host); // IP-Adresse von Debian
-		ds.setDatabaseName(databasename); // Datenbank
-		ds.setUser(username); // Datenbankuser
-		ds.setPassword(password); // Datenbankpasswort
-		// Verbindung herstellen
+		ds = new PGSimpleDataSource();
+		ds.setServerName(host);
+		ds.setDatabaseName(databasename);
+		ds.setUser(username);
+		ds.setPassword(password);
 		try {
 			con = ds.getConnection();
 		} catch (SQLException e) {
+			System.err.println("Error while establishing connection: ");
 			e.printStackTrace();
+			cleanup();
+			System.exit(-1);
 		}
 	}
 	
 	/**
 	 * wrapper for prepareStatement method of JDBC's connection class
-	 * @param statement
-	 * @return
+	 * @param statement the sql statement, used for the prepared statements
+	 * @return if an error occurs, the connection is closed, an error printed to stderr and the program exited
 	 */
 	public PreparedStatement prepareStatement(String statement){
 		try {
 			return con.prepareStatement(statement);
 		} catch (SQLException e) {
-			e.printStackTrace(); //TODO improve error handling...
+			System.err.println("Error while preparing statement:");
+			e.printStackTrace();
+			cleanup();
+			System.exit(-1);
 		}
 		return null;
+	}
+	
+	/**
+	 * closes connection, prints error message, if closing failed
+	 */
+	public void cleanup(){
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Error while closing connection:");
+			e.printStackTrace();
+		}
 	}
 	
 }

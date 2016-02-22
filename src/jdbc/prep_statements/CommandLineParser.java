@@ -83,4 +83,6 @@ public class CommandLineParser {
 	public String getArgumentOf (String option){
 		return ""+set.valueOf(option);
 	}
+	
+	
 }
