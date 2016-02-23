@@ -15,14 +15,17 @@ public class CRUD_Test {
 	private PreparedStatement insert, select, update, delete;
 	private String table = "person";
 	private DBConnection con;
+	private boolean logging;
 	
 	/**
 	 * creates an crud test object
 	 * uses given connection to create four prepared statements (create, read, update, delete)
 	 * @param con established connection
+	 * @param logging determines if logging is enabled or not
 	 */
-	public CRUD_Test(DBConnection con) {
+	public CRUD_Test(DBConnection con, boolean logging) {
 		this.con = con;
+		this.logging = logging;
 		insert = con.prepareStatement("INSERT INTO " + table + " VALUES(?, ?, ?)");
 		select = con.prepareStatement("SELECT * FROM " + table + " WHERE nummer = ?");
 		update = con.prepareStatement("UPDATE " + table + " SET vorname = ? WHERE nummer = ?");
@@ -38,12 +41,10 @@ public class CRUD_Test {
 	public ResultSet selectPerson(int nummer){
 		try {
 			select.setInt(1, nummer);
-			System.out.println(select.toString());
+			if(logging) System.out.println(select.toString());
 			return select.executeQuery();
 		} catch(SQLException e){
-			System.err.println("Error while executing query:");
-			e.printStackTrace();
-			con.cleanup();
+			handleException(e);
 		}
 		return null;
 	}
@@ -58,7 +59,7 @@ public class CRUD_Test {
 			insert.setInt(1, nummer);
 			insert.setString(2, vorname);
 			insert.setString(3, nachname);
-		System.out.println(insert.toString());
+			if(logging) System.out.println(insert.toString());
 			insert.execute();
 		}catch(SQLException e){
 			handleException(e);
@@ -73,7 +74,7 @@ public class CRUD_Test {
 		try{
 			update.setString(1, vorname);
 			update.setInt(2, nummer);
-			System.out.println(update.toString());
+			if(logging) System.out.println(update.toString());
 			update.executeUpdate();
 		}catch(SQLException e){
 			handleException(e);
@@ -86,7 +87,7 @@ public class CRUD_Test {
 	public void deletePerson(int nummer){
 		try{
 			delete.setInt(1, nummer);
-			System.out.println(delete.toString());
+			if(logging) System.out.println(delete.toString());
 			delete.executeUpdate();
 		}catch(SQLException e){
 			handleException(e);

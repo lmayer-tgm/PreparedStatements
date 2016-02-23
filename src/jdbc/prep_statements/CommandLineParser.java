@@ -26,17 +26,33 @@ public class CommandLineParser {
 	public static List<String> PASSWORD = Arrays.asList("password","pw");
 	public static List<String> PORT = Arrays.asList("port","p");
 	public static List<String> HELP = Arrays.asList("help","?");
+	public static List<String> OPERATIONS = Arrays.asList("operations","op");
+	public static List<String> VERBOSE = Arrays.asList("verbose","v");
+	public static List<String> AMOUNT = Arrays.asList("amount","a");
+
 											 /*option description					argument description*/
 	public static String[] HOSTNAME_DESC = {"server to connect to", 					"ip_or_hostname"};
 	public static String[] DBNAME_DESC = {	"name of db to connect to", 				"database_name"};
 	public static String[] USERNAME_DESC = {"username of user used for connection", 	"username"};
 	public static String[] PASSWORD_DESC = {"password of user used for connection", 	"password"};
 	public static String[] PORT_DESC = {	"port, used for connection to db server", 	"port"};
+	public static String[] OPERATIONS_DESC = {"operations to do executed in"
+			+ "	the order provided: c...insertr...select,u...update,d...delete","operations_string"};
+	public static String[] AMOUNT_DESC = {	"the amount of test rows", 					"amount_of_rows"};
+
+	public static String VERBOSE_DESC = "enables verbose logging (all statements and results of queries)"
+			+ "\nit may work faster without logging";
+
 	private static int DEFAULT_PORT = 5432;
+	private static String DEFAULT_OPS = "crud";
+	private static int DEFAULT_AMOUNT = 10000;
 
 	private OptionParser parser;
 	private OptionSet set;
 
+	/**
+	 * Creates a new CommandLineParser object, accepting various options
+	 */
 	public CommandLineParser() {
 		parser = new OptionParser();
 		parser.acceptsAll(HELP, "prints this help message").forHelp();
@@ -45,7 +61,9 @@ public class CommandLineParser {
 		parser.acceptsAll(USERNAME, USERNAME_DESC[0]).withRequiredArg().describedAs(USERNAME_DESC[1]).ofType(String.class).required();
 		parser.acceptsAll(PASSWORD, PASSWORD_DESC[0]).withRequiredArg().describedAs(PASSWORD_DESC[1]).ofType(String.class).required();
 		parser.acceptsAll(PORT, PORT_DESC[0]).withOptionalArg().describedAs(PORT_DESC[1]).ofType(Integer.class).defaultsTo(DEFAULT_PORT);
-
+		parser.acceptsAll(VERBOSE, VERBOSE_DESC);
+		parser.acceptsAll(OPERATIONS, OPERATIONS_DESC[0]).withOptionalArg().describedAs(OPERATIONS_DESC[1]).ofType(String.class).defaultsTo(DEFAULT_OPS);
+		parser.acceptsAll(AMOUNT, AMOUNT_DESC[0]).withOptionalArg().describedAs(AMOUNT_DESC[1]).ofType(Integer.class).defaultsTo(DEFAULT_AMOUNT);
 	}
 
 	/**
@@ -57,8 +75,10 @@ public class CommandLineParser {
 	 */
 	public void parse(String[] toParse) {
 		set = parser.parse(toParse);
-		if(set.has(HELP.get(0)))
+		if(set.has(HELP.get(0))){
 			printHelp();
+			System.exit(0);
+		}
 	}
 	
 	/**
@@ -76,12 +96,23 @@ public class CommandLineParser {
 	}
 	
 	/**
+	 * wrapper for optionset_obj.valueOf(..) method
 	 * returns the supplied argument to the handed option (if there was an argument supplied)
 	 * @param option the option, which's argument is requested
 	 * @return argument supplied to a specific option
 	 */
-	public String getArgumentOf (String option){
+	public String getArgumentOf(String option){
 		return ""+set.valueOf(option);
+	}
+	
+	/**
+	 * wrapper for optionset_obj.has(..) method
+	 * checks if options was supplied
+	 * @param option the name of the option (e.g. "-v")
+	 * @return true if option was supplied, false otherwise
+	 */
+	public boolean hasOption(String option){
+		return set.has(option);
 	}
 	
 	
