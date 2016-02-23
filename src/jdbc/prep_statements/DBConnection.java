@@ -24,12 +24,13 @@ public class DBConnection {
 	 * @param username username
 	 * @param password password
 	 */
-	public DBConnection(String host, String databasename, String username, String password) {
+	public DBConnection(String host, String databasename, String username, String password, int port) {
 		ds = new PGSimpleDataSource();
 		ds.setServerName(host);
 		ds.setDatabaseName(databasename);
 		ds.setUser(username);
 		ds.setPassword(password);
+		ds.setPortNumber(port);
 		try {
 			con = ds.getConnection();
 		} catch (SQLException e) {
