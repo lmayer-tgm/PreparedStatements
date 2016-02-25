@@ -25,12 +25,13 @@ public class PrepStatements_Main {
 			max = min + Integer.parseInt(parser.getArgumentOf(CommandLineParser.AMOUNT.get(0)));
 			startTest(test, min, max, parser.hasOption(CommandLineParser.VERBOSE.get(0)),parser.getArgumentOf(CommandLineParser.OPERATIONS.get(0)));
 		} catch(OptionException exc){
-			System.out.println(exc.getMessage());
+			System.out.println(exc.getMessage()+"\nFor help supply -? or --help");
 		} catch (SQLException e) {
 			System.err.println("JDBC error:");
 			e.printStackTrace();
 		} finally {
-			conn.cleanup();
+			if(conn!=null)
+				conn.cleanup();
 		}
 	}
 
