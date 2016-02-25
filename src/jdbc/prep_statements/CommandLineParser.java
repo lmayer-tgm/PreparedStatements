@@ -21,7 +21,7 @@ import joptsimple.OptionSet;
 public class CommandLineParser {
 	
 	public static List<String> HOSTNAME = Arrays.asList("hostname","host","h");
-	public static List<String> DBNAME = Arrays.asList("databasename","dbname","db");
+	public static List<String> DBNAME = Arrays.asList("databasename","database","dbname","db");
 	public static List<String> USERNAME = Arrays.asList("username","user","u");
 	public static List<String> PASSWORD = Arrays.asList("password","pw");
 	public static List<String> PORT = Arrays.asList("port","p");
