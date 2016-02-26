@@ -20,32 +20,31 @@ import joptsimple.OptionSet;
  */
 public class CommandLineParser {
 	
-	public static List<String> HOSTNAME = Arrays.asList("hostname","host","h");
-	public static List<String> DBNAME = Arrays.asList("databasename","database","dbname","db");
-	public static List<String> USERNAME = Arrays.asList("username","user","u");
-	public static List<String> PASSWORD = Arrays.asList("password","pw");
-	public static List<String> PORT = Arrays.asList("port","p");
-	public static List<String> HELP = Arrays.asList("help","?");
-	public static List<String> OPERATIONS = Arrays.asList("operations","op");
-	public static List<String> VERBOSE = Arrays.asList("verbose","v");
-	public static List<String> AMOUNT = Arrays.asList("amount","a");
-
+	public static final List<String> HOSTNAME = Arrays.asList("hostname","host","h");
+	public static final List<String> DBNAME = Arrays.asList("databasename","database","dbname","db");
+	public static final List<String> USERNAME = Arrays.asList("username","user","u");
+	public static final List<String> PASSWORD = Arrays.asList("password","pw");
+	public static final List<String> PORT = Arrays.asList("port","p");
+	public static final List<String> HELP = Arrays.asList("help","?");
+	public static final List<String> OPERATIONS = Arrays.asList("operations","op");
+	public static final List<String> VERBOSE = Arrays.asList("verbose","v");
+	public static final List<String> AMOUNT = Arrays.asList("amount","a");
 											 /*option description					argument description*/
-	public static String[] HOSTNAME_DESC = {"server to connect to", 					"ip_or_hostname"};
-	public static String[] DBNAME_DESC = {	"name of db to connect to", 				"database_name"};
-	public static String[] USERNAME_DESC = {"username of user used for connection", 	"username"};
-	public static String[] PASSWORD_DESC = {"password of user used for connection", 	"password"};
-	public static String[] PORT_DESC = {	"port, used for connection to db server", 	"port"};
-	public static String[] OPERATIONS_DESC = {"operations to do executed in"
+	public static final String[] HOSTNAME_DESC = {"server to connect to", 					"ip_or_hostname"};
+	public static final String[] DBNAME_DESC = {	"name of db to connect to", 				"database_name"};
+	public static final String[] USERNAME_DESC = {"username of user used for connection", 	"username"};
+	public static final String[] PASSWORD_DESC = {"password of user used for connection", 	"password"};
+	public static final String[] PORT_DESC = {	"port, used for connection to db server", 	"port"};
+	public static final String[] OPERATIONS_DESC = {"operations to do executed in"
 			+ "	the order provided: c...insertr...select,u...update,d...delete","operations_string"};
-	public static String[] AMOUNT_DESC = {	"the amount of test rows", 					"amount_of_rows"};
+	public static final String[] AMOUNT_DESC = {	"the amount of test rows", 					"amount_of_rows"};
 
-	public static String VERBOSE_DESC = "enables verbose logging (all statements and results of queries)"
+	public static final String VERBOSE_DESC = "enables verbose logging (all statements and results of queries)"
 			+ "\nit may work faster without logging";
 
-	private static int DEFAULT_PORT = 5432;
-	private static String DEFAULT_OPS = "crud";
-	private static int DEFAULT_AMOUNT = 10000;
+	private static final int DEFAULT_PORT = 5432;
+	private static final String DEFAULT_OPS = "crud";
+	private static final int DEFAULT_AMOUNT = 10000;
 
 	private OptionParser parser;
 	private OptionSet set;
