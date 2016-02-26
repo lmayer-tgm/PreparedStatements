@@ -11,9 +11,12 @@ import java.sql.SQLException;
  * @version 20160218.1
  */
 public class CRUD_Test {
-
+	private static final String INSERT_STATEMENT = "INSERT INTO person VALUES(?, ?, ?)";
+	private static final String SELECT_STATEMENT = "SELECT * FROM person WHERE nummer = ?";
+	private static final String UPDATE_STATEMENT = "UPDATE person SET vorname = ? WHERE nummer = ?";
+	private static final String DELETE_STATEMENT = "DELETE FROM person WHERE nummer = ?";
+	
 	private PreparedStatement insert, select, update, delete;
-	private String table = "person";
 	private DBConnection con;
 	private boolean logging;
 	
@@ -26,10 +29,10 @@ public class CRUD_Test {
 	public CRUD_Test(DBConnection con, boolean logging) {
 		this.con = con;
 		this.logging = logging;
-		insert = con.prepareStatement("INSERT INTO " + table + " VALUES(?, ?, ?)");
-		select = con.prepareStatement("SELECT * FROM " + table + " WHERE nummer = ?");
-		update = con.prepareStatement("UPDATE " + table + " SET vorname = ? WHERE nummer = ?");
-		delete = con.prepareStatement("DELETE FROM " + table + " WHERE nummer = ?");
+		insert = con.prepareStatement(INSERT_STATEMENT);
+		select = con.prepareStatement(SELECT_STATEMENT);
+		update = con.prepareStatement(UPDATE_STATEMENT);
+		delete = con.prepareStatement(DELETE_STATEMENT);
 	}
 	
 	/**
