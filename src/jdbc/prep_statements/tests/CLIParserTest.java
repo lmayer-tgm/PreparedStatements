@@ -9,7 +9,9 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
 import jdbc.prep_statements.CommandLineParser;
 import joptsimple.OptionException;
@@ -26,21 +28,28 @@ public class CLIParserTest {
 	/*basically everything is just printed to this streams instead of stdout;
 	 *  therefore it can be tested easily*/
 	
+	@Rule
+	public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+	
+	private CommandLineParser parser;
+	
 	/**
 	 * Called before each test, used to redirect all content, written to stdout to another
 	 * output stream (it sets System.out to another output stream then stdout)
 	 */
 	@Before
-	public void setUpStreams(){
+	public void setUp(){
 		System.setOut(new PrintStream(outContent));
+		parser = new CommandLineParser();
 	}
 	
 	/**
 	 * Called after each test, resets System.out to stdout
 	 */
 	@After
-	public void cleanUpStreams(){
+	public void cleanUp(){
 		System.setOut(null);
+		parser = null;
 	}
 
 	/**
@@ -49,7 +58,6 @@ public class CLIParserTest {
 	 */
 	@Test(expected=OptionException.class)
 	public void testParseArgsMissing() {
-		CommandLineParser parser = new CommandLineParser();
 		String[] args = {"--host", "host_name"}; // arguments missing -> should lead to error
 		parser.parse(args);
 	}
@@ -60,12 +68,10 @@ public class CLIParserTest {
 	 */
 	@Test
 	public void testParseArgsSupplied() {
-		CommandLineParser parser = new CommandLineParser();
 		String[] args1 = {"--host", "host_name", "--dbname", "name", "--username", "user", "--password", "pw"}; // arguments here ->  no error
 		parser.parse(args1);
 		String[] args2 = {"-h", "host_name", "-db", "name", "-u", "user", "-pw", "pw"}; // synonym forms
 		parser.parse(args2);
-
 	}
 	
 	/**
@@ -74,7 +80,7 @@ public class CLIParserTest {
 	 */
 	@Test
 	public void testParseHelp() {
-		CommandLineParser parser = new CommandLineParser();
+		exit.expectSystemExitWithStatus(0);
 		String[] args = {"--help"}; // help option here -> no error
 		parser.parse(args);
 	}
@@ -85,9 +91,7 @@ public class CLIParserTest {
 	 */
 	@Test
 	public void testPrintHelp() {
-		CommandLineParser parser = new CommandLineParser();
-		String[] args = {"--help"}; // arguments missing -> should lead to error
-		parser.parse(args);
+		parser.printHelp();
 		String output = outContent.toString();
 		Assert.assertTrue(output.contains("--host")); //didn't test ALL of the content, that will be printed out...
 		Assert.assertTrue(output.contains("server to connect to"));
@@ -107,7 +111,6 @@ public class CLIParserTest {
 	@Test
 	public void testGetArgumentOf() {
 		String hostname = "some_host", dbname = "some_db", username = "some_user", password = "super_secret", port = "5432";
-		CommandLineParser parser = new CommandLineParser();
 		String[] args1 = {"--host", hostname, "--dbname", dbname, "--username", username, "--password", password};
 		parser.parse(args1);
 		Assert.assertEquals(hostname, parser.getArgumentOf("host"));
@@ -119,8 +122,19 @@ public class CLIParserTest {
 		parser.parse(args2);
 		Assert.assertEquals("1111", parser.getArgumentOf("port"));
 		Assert.assertEquals("some_db", parser.getArgumentOf("databasename"));
-
-
+	}
+	
+	/**
+	 * Test method for {@link jdbc.prep_statements.CommandLineParser#hasOption(java.lang.String)}.
+	 * Checks if option were present when parsing or not
+	 */
+	@Test
+	public void testHasOption() {
+		String[] args = {"--host", "some_host", "--dbname", "some_db", "--username", "some_user", "--password", "some_pw", "-v"};
+		parser.parse(args);
+		Assert.assertTrue(parser.hasOption("host"));
+		Assert.assertTrue(parser.hasOption("v"));
+		Assert.assertFalse(parser.hasOption("port"));
 	}
 
 }
