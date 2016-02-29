@@ -11,11 +11,22 @@ import org.postgresql.ds.PGSimpleDataSource;
  * operations
  * 
  * @author pkomon, lmayer
- * @version 20160218.2
+ * @version 20160229.1
  */
 public class DBConnection {
 	private PGSimpleDataSource ds;
 	private Connection con;
+	
+	/**
+	 * Constructor for easy dependency injection (ONLY USED FOR TESTING)
+	 * (... so I really need to modify class only for testing it ...?)
+	 * @param ds the data source to set the data source field
+	 * @param con the connection to set the connection field
+	 */
+	public DBConnection(PGSimpleDataSource ds, Connection con){
+		this.ds = ds;
+		this.con = con;
+	}
 	
 	/**
 	 * establishes a new connection
