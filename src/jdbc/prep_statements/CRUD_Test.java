@@ -21,6 +21,22 @@ public class CRUD_Test {
 	private boolean logging;
 	
 	/**
+	 * Constructor for easy dependency injection (ONLY USED FOR TESTING)
+	 * (... so I really need to modify class only for testing it ...?)
+	 * @param ds the data source to set the data source field
+	 * @param con the connection to set the connection field
+	 */
+	public CRUD_Test(DBConnection con, PreparedStatement insert, PreparedStatement select, PreparedStatement update,
+			PreparedStatement delete, boolean logging) {
+		this.con = con;
+		this.insert = insert;
+		this.select = select;
+		this.update = update;
+		this.delete = delete;
+		this.logging = logging;
+	}
+
+	/**
 	 * creates an crud test object
 	 * uses given connection to create four prepared statements (create, read, update, delete)
 	 * @param con established connection

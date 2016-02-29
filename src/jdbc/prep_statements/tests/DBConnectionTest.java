@@ -38,7 +38,9 @@ public class DBConnectionTest {
 	public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 	
 	/**
-	 * inject mock objects into the DBConnection object used for testing
+	 * create declared mock objects, 
+	 * inject mock objects into the DBConnection object used for testing, 
+	 * redirect write operations to System.err to errContent
 	 */
 	@Before
 	public void setUp() {
@@ -48,7 +50,7 @@ public class DBConnectionTest {
 	}
 	
 	/**
-	 *  resets System.out to stdout
+	 *  resets System.err to stderr
 	 */
 	@After
 	public void cleanUp() {
