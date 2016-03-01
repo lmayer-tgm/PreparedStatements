@@ -24,7 +24,7 @@ import jdbc.prep_statements.DBConnection;
 
 /**
  * Test cases for DBConnection class
- * @author pkomon
+ * @author pkomon, lmayer
  * @version 20160229.1
  */
 public class DBConnectionTest {
