@@ -18,7 +18,7 @@ import joptsimple.OptionException;
 
 /**
  * Unit tests for methods of CommandLineParser class
- * @author pkomon
+ * @author pkomon, lmayer
  * @version 20160221.1
  */
 public class CLIParserTest {

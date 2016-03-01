@@ -23,7 +23,7 @@ import jdbc.prep_statements.DBConnection;
 
 /**
  * Test cases for CRUD_Test class
- * @author pkomon
+ * @author pkomon, lmayer
  * @version 20160229.2
  *
  */
