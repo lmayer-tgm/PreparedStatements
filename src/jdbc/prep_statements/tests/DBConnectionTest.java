@@ -31,7 +31,6 @@ public class DBConnectionTest {
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 	
 	@Mock private Connection con;
-	@Mock private PGSimpleDataSource ds;
 	private DBConnection dbCon;
 	
 	@Rule
@@ -46,7 +45,7 @@ public class DBConnectionTest {
 	public void setUp() {
 		System.setErr(new PrintStream(errContent));
 		MockitoAnnotations.initMocks(this);
-		dbCon = new DBConnection(ds, con);
+		dbCon = new DBConnection(con);
 	}
 	
 	/**

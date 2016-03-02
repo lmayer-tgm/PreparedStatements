@@ -14,7 +14,6 @@ import org.postgresql.ds.PGSimpleDataSource;
  * @version 20160229.1
  */
 public class DBConnection {
-	private PGSimpleDataSource ds;
 	private Connection con;
 	
 	/**
@@ -23,8 +22,7 @@ public class DBConnection {
 	 * @param ds the data source to set the data source field
 	 * @param con the connection to set the connection field
 	 */
-	public DBConnection(PGSimpleDataSource ds, Connection con){
-		this.ds = ds;
+	public DBConnection(Connection con){
 		this.con = con;
 	}
 	
@@ -36,7 +34,7 @@ public class DBConnection {
 	 * @param password password
 	 */
 	public DBConnection(String host, String databasename, String username, String password, int port) {
-		ds = new PGSimpleDataSource();
+		PGSimpleDataSource ds = new PGSimpleDataSource();
 		ds.setServerName(host);
 		ds.setDatabaseName(databasename);
 		ds.setUser(username);
