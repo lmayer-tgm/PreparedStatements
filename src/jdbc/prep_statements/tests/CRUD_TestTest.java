@@ -6,6 +6,7 @@ package jdbc.prep_statements.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -81,12 +82,20 @@ public class CRUD_TestTest {
 	public void testSelectPerson() {
 		int nummer = 1;
 		PreparedStatement select = Mockito.mock(PreparedStatement.class);
+		ResultSet resExp = Mockito.mock(ResultSet.class);
+		try {
+			Mockito.doReturn(resExp).when(select).executeQuery();
+		} catch (SQLException e1) {
+			Assert.fail();
+			e1.printStackTrace();
+		}
 		Mockito.doReturn(SELECT_STATEMENT).when(select).toString();
 		crud = new CRUD_Test(con, null, select, null, null, true);
-		crud.selectPerson(nummer);
+		ResultSet resAct = crud.selectPerson(nummer);
 		try {
 			Mockito.verify(select).setInt(1, nummer);
 			Mockito.verify(select).executeQuery();
+			Assert.assertEquals(resExp, resAct);
 		} catch (SQLException e) {
 			Assert.fail();
 			e.printStackTrace();
