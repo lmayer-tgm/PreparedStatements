@@ -21,7 +21,7 @@ public class PrepStatements_Main {
 			conn = new DBConnection(parser.getArgumentOf(CommandLineParser.HOSTNAME.get(0)), parser.getArgumentOf(CommandLineParser.DBNAME.get(0)), 
 					parser.getArgumentOf(CommandLineParser.USERNAME.get(0)), parser.getArgumentOf(CommandLineParser.PASSWORD.get(0)),
 					Integer.parseInt(parser.getArgumentOf(CommandLineParser.PORT.get(0))));
-			CRUD_Test test = new CRUD_Test(conn, parser.hasOption(CommandLineParser.VERBOSE.get(0)));
+			CRUDOperations test = new CRUDOperations(conn, parser.hasOption(CommandLineParser.VERBOSE.get(0)));
 			max = min + Integer.parseInt(parser.getArgumentOf(CommandLineParser.AMOUNT.get(0)));
 			startTest(test, min, max, parser.hasOption(CommandLineParser.VERBOSE.get(0)),parser.getArgumentOf(CommandLineParser.OPERATIONS.get(0)));
 		} catch(OptionException exc){
@@ -46,7 +46,7 @@ public class PrepStatements_Main {
 	 * 		 			 c...insert,r...select,u...update,d...delete
 	 * @throws SQLException
 	 */
-	private static void startTest(CRUD_Test test, int min, int max, boolean logging, String operations) throws SQLException{
+	private static void startTest(CRUDOperations test, int min, int max, boolean logging, String operations) throws SQLException{
 		for(int i = 0; i < operations.length(); ++i)
 			switch (operations.charAt(i)) {
 				case 'c':
@@ -73,7 +73,7 @@ public class PrepStatements_Main {
 	 * @param logging determines if output of query results to stdout is enabled
 	 * @throws SQLException
 	 */
-	private static void select(CRUD_Test test, int min, int max, boolean logging) throws SQLException{
+	private static void select(CRUDOperations test, int min, int max, boolean logging) throws SQLException{
 		ResultSet set = null;
 		for (int i = min; i < max; i++) {
 			set = test.selectPerson(i);
@@ -90,7 +90,7 @@ public class PrepStatements_Main {
 	 * @param max the id of the last row to be selected
 	 * @throws SQLException
 	 */
-	private static void insert(CRUD_Test test, int min, int max) throws SQLException{
+	private static void insert(CRUDOperations test, int min, int max) throws SQLException{
 		for (int i = min; i < max; i++) 
 			test.insertPerson(i, "vorname"+i, "nachname"+i);
 	}
@@ -102,7 +102,7 @@ public class PrepStatements_Main {
 	 * @param max the id of the last row to be selected
 	 * @throws SQLException
 	 */
-	private static void update(CRUD_Test test, int min, int max) throws SQLException{
+	private static void update(CRUDOperations test, int min, int max) throws SQLException{
 		for (int i = min; i < max; i++)
 			test.updatePerson(i, ("vorname"+i).toUpperCase());
 	}
@@ -114,7 +114,7 @@ public class PrepStatements_Main {
 	 * @param max the id of the last row to be selected
 	 * @throws SQLException
 	 */
-	private static void delete(CRUD_Test test, int min, int max) throws SQLException{
+	private static void delete(CRUDOperations test, int min, int max) throws SQLException{
 		for (int i = min; i < max; i++) 
 			test.deletePerson(i);
 	}

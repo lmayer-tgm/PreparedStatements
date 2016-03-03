@@ -1,6 +1,3 @@
-/**
- * 
- */
 package jdbc.prep_statements.tests;
 
 import java.io.ByteArrayOutputStream;
@@ -19,16 +16,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import jdbc.prep_statements.CRUD_Test;
+import jdbc.prep_statements.CRUDOperations;
 import jdbc.prep_statements.DBConnection;
 
 /**
- * Test cases for CRUD_Test class
+ * Test cases for CRUDOperations class
  * @author pkomon, lmayer
  * @version 20160229.2
  *
  */
-public class CRUD_TestTest {
+public class CRUDOperationsTest {
 	private static final String INSERT_STATEMENT = "INSERT INTO person VALUES(?, ?, ?)";
 	private static final String SELECT_STATEMENT = "SELECT * FROM person WHERE nummer = ?";
 	private static final String UPDATE_STATEMENT = "UPDATE person SET vorname = ? WHERE nummer = ?";
@@ -37,7 +34,7 @@ public class CRUD_TestTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	
 	@Mock private DBConnection con;
-	private CRUD_Test crud;
+	private CRUDOperations crud;
 	
 	@Rule
 	public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -61,12 +58,12 @@ public class CRUD_TestTest {
 	}
 
 	/**
-	 * Test method for {@link jdbc.prep_statements.CRUD_Test#CRUD_Test(jdbc.prep_statements.DBConnection, boolean)}.
+	 * Test method for {@link jdbc.prep_statements.CRUDOperations#CRUD_Test(jdbc.prep_statements.DBConnection, boolean)}.
 	 * tests if all statements are prepared
 	 */
 	@Test
 	public void testCRUD_Test() {
-		crud = new CRUD_Test(con, true);
+		crud = new CRUDOperations(con, true);
 		Mockito.verify(con).prepareStatement(INSERT_STATEMENT);
 		Mockito.verify(con).prepareStatement(SELECT_STATEMENT);
 		Mockito.verify(con).prepareStatement(UPDATE_STATEMENT);
@@ -74,7 +71,7 @@ public class CRUD_TestTest {
 	}
 
 	/**
-	 * Test method for {@link jdbc.prep_statements.CRUD_Test#selectPerson(int)}.
+	 * Test method for {@link jdbc.prep_statements.CRUDOperations#selectPerson(int)}.
 	 * checks if values were substituted (setVar(index,val)), if the prepared statement was executed and
 	 * if logging and error handling is working properly
 	 */
@@ -90,7 +87,7 @@ public class CRUD_TestTest {
 			e1.printStackTrace();
 		}
 		Mockito.doReturn(SELECT_STATEMENT).when(select).toString();
-		crud = new CRUD_Test(con, null, select, null, null, true);
+		crud = new CRUDOperations(con, null, select, null, null, true);
 		ResultSet resAct = crud.selectPerson(nummer);
 		try {
 			Mockito.verify(select).setInt(1, nummer);
@@ -113,7 +110,7 @@ public class CRUD_TestTest {
 	}
 
 	/**
-	 * Test method for {@link jdbc.prep_statements.CRUD_Test#insertPerson(int, java.lang.String, java.lang.String)}.
+	 * Test method for {@link jdbc.prep_statements.CRUDOperations#insertPerson(int, java.lang.String, java.lang.String)}.
 	 * checks if values were substituted (setVar(index,val)), if the prepared statement was executed and
 	 * if logging and error handling is working properly
 	 */
@@ -123,7 +120,7 @@ public class CRUD_TestTest {
 		int nummer = 1;
 		PreparedStatement insert = Mockito.mock(PreparedStatement.class);
 		Mockito.doReturn(INSERT_STATEMENT).when(insert).toString();
-		crud = new CRUD_Test(con, insert, null, null, null, true);
+		crud = new CRUDOperations(con, insert, null, null, null, true);
 		crud.insertPerson(nummer, vname, nname);
 		try {
 			Mockito.verify(insert).setInt(1, nummer);
@@ -147,7 +144,7 @@ public class CRUD_TestTest {
 	}
 
 	/**
-	 * Test method for {@link jdbc.prep_statements.CRUD_Test#updatePerson(int, java.lang.String)}.
+	 * Test method for {@link jdbc.prep_statements.CRUDOperations#updatePerson(int, java.lang.String)}.
 	 * checks if values were substituted (setVar(index,val)), if the prepared statement was executed and
 	 * if logging and error handling is working properly
 	 */
@@ -157,7 +154,7 @@ public class CRUD_TestTest {
 		int nummer = 1;
 		PreparedStatement update = Mockito.mock(PreparedStatement.class);
 		Mockito.doReturn(UPDATE_STATEMENT).when(update).toString();
-		crud = new CRUD_Test(con, null, null, update, null, true);
+		crud = new CRUDOperations(con, null, null, update, null, true);
 		crud.updatePerson(nummer, vname);
 		try {
 			Mockito.verify(update).setString(1, vname);
@@ -180,7 +177,7 @@ public class CRUD_TestTest {
 	}
 
 	/**
-	 * Test method for {@link jdbc.prep_statements.CRUD_Test#deletePerson(int)}.
+	 * Test method for {@link jdbc.prep_statements.CRUDOperations#deletePerson(int)}.
 	 * checks if values were substituted (setVar(index,val)), if the prepared statement was executed and
 	 * if logging and error handling is working properly
 	 */
@@ -189,7 +186,7 @@ public class CRUD_TestTest {
 		int nummer = 1;
 		PreparedStatement delete = Mockito.mock(PreparedStatement.class);
 		Mockito.doReturn(DELETE_STATEMENT).when(delete).toString();
-		crud = new CRUD_Test(con, null, null, null, delete, true);
+		crud = new CRUDOperations(con, null, null, null, delete, true);
 		crud.deletePerson(nummer);
 		try {
 			Mockito.verify(delete).setInt(1, nummer);

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package jdbc.prep_statements.tests;
 
 import java.io.ByteArrayOutputStream;
@@ -18,7 +15,6 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.postgresql.ds.PGSimpleDataSource;
 
 import jdbc.prep_statements.DBConnection;
 

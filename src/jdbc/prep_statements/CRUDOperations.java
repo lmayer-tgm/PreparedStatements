@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * @author pkomon, lmayer
  * @version 20160218.1
  */
-public class CRUD_Test {
+public class CRUDOperations {
 	private static final String INSERT_STATEMENT = "INSERT INTO person VALUES(?, ?, ?)";
 	private static final String SELECT_STATEMENT = "SELECT * FROM person WHERE nummer = ?";
 	private static final String UPDATE_STATEMENT = "UPDATE person SET vorname = ? WHERE nummer = ?";
@@ -26,7 +26,7 @@ public class CRUD_Test {
 	 * @param ds the data source to set the data source field
 	 * @param con the connection to set the connection field
 	 */
-	public CRUD_Test(DBConnection con, PreparedStatement insert, PreparedStatement select, PreparedStatement update,
+	public CRUDOperations(DBConnection con, PreparedStatement insert, PreparedStatement select, PreparedStatement update,
 			PreparedStatement delete, boolean logging) {
 		this.con = con;
 		this.insert = insert;
@@ -42,7 +42,7 @@ public class CRUD_Test {
 	 * @param con established connection
 	 * @param logging determines if logging is enabled or not
 	 */
-	public CRUD_Test(DBConnection con, boolean logging) {
+	public CRUDOperations(DBConnection con, boolean logging) {
 		this.con = con;
 		this.logging = logging;
 		insert = con.prepareStatement(INSERT_STATEMENT);
